@@ -1,16 +1,34 @@
-'use client'
-
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import { ThemeProvider } from 'next-themes'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from 'sonner'
+import Navbar from '@/components/Navbar' // 🧠 DON'T FORGET THIS
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'Bloggy',
+  description: 'Your personal blogging platform',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          
           <Navbar />
-          <main className="px-4 py-8">{children}</main>
+          {children}
+          <Toaster richColors position="top-center" />
         </ThemeProvider>
       </body>
     </html>

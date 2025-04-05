@@ -1,20 +1,8 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
-@import "tw-animate-css"; /* if you're using that */
+@import "tailwindcss";
+@import "tw-animate-css";
 
+@tailwind utilities;
 
-/* Your custom global styles */
-body {
-  background-color: #fbf9ff;
-  color: #000807;
-  font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.dark body {
-  background-color: #000807;
-  color: #fbf9ff;
-}
 
 
 
