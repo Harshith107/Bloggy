@@ -41,7 +41,7 @@ export default function EditBlogPage() {
           .single();
 
         if (error) {
-          throw new Error("Failed to fetch article or you don't have permission");
+         console.log(error);
         }
 
         setTitle(data.title);
@@ -82,13 +82,12 @@ export default function EditBlogPage() {
         .update({ 
           title, 
           content,
-          updated_at: new Date().toISOString()
         })
         .eq("id", blogId)
         .eq("user_id", userId);
 
       if (error) {
-        throw new Error(error.message);
+       console.log(error);
       }
 
       // Success - redirect to the blog post
