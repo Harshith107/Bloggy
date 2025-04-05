@@ -1,103 +1,130 @@
-import Image from "next/image";
+// app/page.tsx
+'use client'
 
-export default function Home() {
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabaseClient'
+import Link from 'next/link'
+
+export default function HomePage() {
+  const [blogs, setBlogs] = useState<any[]>([])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const blogsPerPage = 5
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+useEffect(() => {
+  const fetchBlogs = async () => {
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching blogs:', error);
+      return;
+    }
+
+    const filteredBlogs = data.filter(blog =>
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.content.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setBlogs(filteredBlogs);
+    setLoading(false);
+  };
+
+  fetchBlogs();
+}, [searchTerm]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      setLoading(true)
+
+      const from = (page - 1) * blogsPerPage
+      const to = from + blogsPerPage - 1
+
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(from, to)
+
+      if (error) {
+        console.error('Error fetching blogs:', error)
+        return
+      }
+
+      setBlogs(data)
+      setLoading(false)
+    }
+
+    fetchBlogs()
+  }, [page])
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="max-w-3xl mx-auto p-6">
+      <Link
+  href="/create"
+  className="inline-block mb-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+>
+  + New Blog
+</Link>
+<div className="mb-4">
+  <input
+    type="text"
+    placeholder="Search blogs..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full border px-4 py-2 rounded"
+  />
+</div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* <Link
+        href="/login"
+        className="inline-block mb-6 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">login</Link> */}
+      <h1 className="text-3xl font-bold mb-6">Latest Blogs</h1>
+      {loading ? (
+  <p>Loading blogs...</p>
+) : blogs.length === 0 ? (
+  <p className="text-gray-500">No blogs yet. Be the first to write one!</p>
+) : (
+  <div className="space-y-4">
+    {blogs.map((blog) => (
+      <Link href={`/blog/${blog.id}`} key={blog.id}>
+        <div className="p-4 border rounded cursor-pointer hover:shadow-lg hover:bg-gray-50 transition">
+          <h2 className="text-xl font-semibold">{blog.title}</h2>
+          <p className="text-sm text-gray-600">
+            {new Date(blog.created_at).toLocaleDateString()}
+          </p>
+          <p className="mt-2 text-gray-700 line-clamp-2">
+            {blog.content?.slice(0, 120) || 'No content'}...
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </Link>
+    ))}
+  </div>
+)}
+
+
+      {/* Pagination controls */}
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Previous
+        </button>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="bg-gray-300 px-4 py-2 rounded"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Next
+        </button>
+      </div>
     </div>
-  );
+  )
 }
