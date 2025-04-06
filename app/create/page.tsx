@@ -46,7 +46,7 @@ export default function CreateBlog() {
           content, 
           user_id: data.user.id,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          // updated_at: new Date().toISOString()
         },
       ]);
     
