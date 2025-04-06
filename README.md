@@ -46,8 +46,14 @@ https://bloggy-alpha-wheat.vercel.app/
 ## Features
 
 🔐 User Authentication (Sign Up & Log In)
+
 📝 Create, Edit & Delete Blogs
+
 🙋‍♂️ “My Blogs” section for logged-in users
+
 📚 View blogs posted by all users
+
 🌈 Fully responsive UI
+
 🌞 Light mode only (clean and distraction-free)
+
