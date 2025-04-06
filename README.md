@@ -29,6 +29,7 @@ npm install
 ```
 ### 3. Configure Environment variables
 Create a .env.local file in the root directory and add the following:
+
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 
