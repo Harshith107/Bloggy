@@ -105,7 +105,7 @@ export default function CreateBlog() {
                 placeholder="Enter a compelling title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="text-lg py-6"
+                className="text-lg py-6 text-black"
                 required
               />
             </div>

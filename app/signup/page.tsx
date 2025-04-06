@@ -110,7 +110,7 @@ export default function SignupPage() {
             </div>
           </div>
           
-          <div className="bg-gray-50 px-6 py-4 text-center text-xs text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+          {/* <div className="bg-gray-50 px-6 py-4 text-center text-xs text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
             By creating an account, you agree to our{' '}
             <Link href="/terms" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
               Terms of Service
@@ -119,7 +119,7 @@ export default function SignupPage() {
             <Link href="/privacy" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
               Privacy Policy
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

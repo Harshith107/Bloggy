@@ -79,7 +79,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
-                Premium Journal
+                Bloggy
               </h1>
               <p className="text-blue-100 text-lg max-w-2xl">
                 Curated insights and thoughtful perspectives from industry experts
